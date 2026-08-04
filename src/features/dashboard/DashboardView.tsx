@@ -1,6 +1,7 @@
 import StatsCard from './components/StatsCard';
 import { statsData } from './data';
 import RevenueChart from './components/RevenueChart';
+import RecentOrders from './components/RecentOrders';
 
 export default function DashboardView() {
   return (
@@ -19,6 +20,7 @@ export default function DashboardView() {
         ))}
       </div>
       <RevenueChart />
+      <RecentOrders />
     </section>
   );
 }

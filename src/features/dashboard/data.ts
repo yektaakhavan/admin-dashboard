@@ -31,3 +31,37 @@ export const statsData: Stat[] = [
     icon: Package,
   },
 ];
+
+export const recentOrders = [
+  {
+    id: 1,
+    customer: 'John Doe',
+    product: 'MacBook Pro',
+    status: 'Completed',
+    amount: '$2499',
+  },
+
+  {
+    id: 2,
+    customer: 'Sarah',
+    product: 'Keyboard',
+    status: 'Pending',
+    amount: '$180',
+  },
+
+  {
+    id: 3,
+    customer: 'Alex',
+    product: 'Mouse',
+    status: 'Cancelled',
+    amount: '$90',
+  },
+
+  {
+    id: 4,
+    customer: 'Emma',
+    product: 'Monitor',
+    status: 'Completed',
+    amount: '$550',
+  },
+];
