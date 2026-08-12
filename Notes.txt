@@ -1,0 +1,9 @@
+✨ Framer Motion Animation
+✨ Skeleton Loading
+✨ Top Products
+✨ Activity Timeline
+✨ Zustand (Global State)
+✨ React Query (به‌جای fetch معمولی)
+✨ Mock API با MSW
+✨ TanStack Table
+✨ فرم‌ها با React Hook Form + Zod
