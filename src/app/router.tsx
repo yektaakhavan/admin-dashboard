@@ -1,24 +1,28 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter } from 'react-router-dom';
 
-import DashboardLayout from "@/layouts/dashboard/DashboardLayout";
-import Dashboard from "@/pages/Dashboard";
-import NotFound from "@/pages/NotFound";
-
+import DashboardLayout from '@/layouts/dashboard/DashboardLayout';
+import Dashboard from '@/pages/Dashboard';
+import NotFound from '@/pages/NotFound';
+import Users from '@/pages/Users';
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <DashboardLayout />,
     children: [
       {
         index: true,
         element: <Dashboard />,
       },
+      {
+        path: 'users',
+        element: <Users />,
+      },
     ],
   },
 
   {
-    path: "*",
+    path: '*',
     element: <NotFound />,
   },
 ]);
