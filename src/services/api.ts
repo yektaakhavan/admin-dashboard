@@ -11,3 +11,19 @@ export async function fetchUsers(): Promise<User[]> {
 
   return response.json();
 }
+
+export async function createUser(user: Omit<User, 'id'>): Promise<User> {
+  const response = await fetch(`${API_URL}/users`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to create user');
+  }
+
+  return response.json();
+}

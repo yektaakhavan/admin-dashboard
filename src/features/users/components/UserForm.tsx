@@ -6,17 +6,24 @@ import { Input } from '@/components/ui/input';
 
 import { userSchema, type UserFormData } from '../schema';
 
+import { useCreateUser } from '../hooks/useCreateUser';
+
 export default function UserForm() {
+  const createUserMutation = useCreateUser();
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
   });
 
-  const onSubmit = (data: UserFormData) => {
-    console.log(data);
+  const onSubmit = async (data: UserFormData) => {
+    await createUserMutation.mutateAsync(data);
+
+    reset();
   };
 
   return (
@@ -51,7 +58,13 @@ export default function UserForm() {
         )}
       </div>
 
-      <Button type="submit">Create User</Button>
+      {createUserMutation.isError && (
+        <p className="text-sm text-destructive">Failed to create user.</p>
+      )}
+
+      <Button type="submit" disabled={createUserMutation.isPending}>
+        {createUserMutation.isPending ? 'Creating...' : 'Create User'}
+      </Button>
     </form>
   );
 }
