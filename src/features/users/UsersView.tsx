@@ -1,8 +1,15 @@
+import { useState } from 'react';
+
+import { Input } from '@/components/ui/input';
+
 import UserSkeleton from './components/UserSkeleton';
+import UsersTable from './components/UsersTable';
 import { useUsers } from './hooks/useUsers';
 
 export default function UsersView() {
   const { data, isLoading, isError } = useUsers();
+
+  const [search, setSearch] = useState('');
 
   if (isLoading) {
     return (
@@ -38,19 +45,36 @@ export default function UsersView() {
     );
   }
 
+  const filteredUsers = data.filter((user) => {
+    const query = search.toLowerCase();
+
+    return (
+      user.name.toLowerCase().includes(query) ||
+      user.email.toLowerCase().includes(query) ||
+      user.username.toLowerCase().includes(query)
+    );
+  });
+
   return (
-    <div className="space-y-4">
-      <h1 className="text-3xl font-bold">Users</h1>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold">Users</h1>
 
-      <div className="space-y-2">
-        {data.map((user) => (
-          <div key={user.id} className="rounded-lg border p-4">
-            <p className="font-semibold">{user.name}</p>
-
-            <p className="text-sm text-muted-foreground">{user.email}</p>
-          </div>
-        ))}
+        <p className="mt-2 text-muted-foreground">Manage and search users.</p>
       </div>
+
+      <Input
+        placeholder="Search users..."
+        value={search}
+        onChange={(event) => setSearch(event.target.value)}
+        className="max-w-sm"
+      />
+
+      {filteredUsers.length > 0 ? (
+        <UsersTable users={filteredUsers} />
+      ) : (
+        <p className="text-muted-foreground">No users match your search.</p>
+      )}
     </div>
   );
 }
