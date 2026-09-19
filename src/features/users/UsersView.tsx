@@ -5,7 +5,9 @@ import { Input } from '@/components/ui/input';
 import UserSkeleton from './components/UserSkeleton';
 import UsersTable from './components/UsersTable';
 import { useUsers } from './hooks/useUsers';
+import UserForm from './components/UserForm';
 
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 export default function UsersView() {
   const { data, isLoading, isError } = useUsers();
 
@@ -69,6 +71,16 @@ export default function UsersView() {
         onChange={(event) => setSearch(event.target.value)}
         className="max-w-sm"
       />
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Create User</CardTitle>
+        </CardHeader>
+
+        <CardContent>
+          <UserForm />
+        </CardContent>
+      </Card>
 
       {filteredUsers.length > 0 ? (
         <UsersTable users={filteredUsers} />
