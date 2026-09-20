@@ -4,6 +4,7 @@ import DashboardLayout from '@/layouts/dashboard/DashboardLayout';
 import Dashboard from '@/pages/Dashboard';
 import NotFound from '@/pages/NotFound';
 import Users from '@/pages/Users';
+import { Navigate } from 'react-router-dom';
 
 export const router = createBrowserRouter([
   {
@@ -12,8 +13,13 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <Navigate to="/dashboard" replace />,
+      },
+      {
+        path: 'dashboard',
         element: <Dashboard />,
       },
+
       {
         path: 'users',
         element: <Users />,
