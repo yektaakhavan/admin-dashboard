@@ -1,36 +1,71 @@
-# Rsbuild project
+# Admin Dashboard
 
-## Setup
+A responsive admin dashboard built with React and TypeScript, with a light/dark theme,
+a users management screen and an end-to-end test suite.
 
-Install the dependencies:
+## Tech stack
+
+React 19 · TypeScript · Rsbuild · Tailwind CSS v4 · shadcn/ui · React Router ·
+Zustand · TanStack Query · React Hook Form + Zod · Recharts · Motion · Lucide · Playwright
+
+## Features
+
+- **Dashboard**: statistics cards, revenue chart, recent orders
+- **Users**: list (TanStack Query) with loading / error (+ retry) / empty states,
+  live search, and a create-user form (React Hook Form + Zod) that updates the query cache
+- **Layout**: responsive sidebar (off-canvas drawer on mobile), header with notifications
+  menu, theme toggle and user area, active navigation state, skip-to-content link
+- **Light / dark theme**: follows the OS on first visit, then remembers the choice
+- **404 page** and a route-level error boundary; pages are lazy-loaded
+
+## Getting started
 
 ```bash
 npm install
+npm run dev        # http://localhost:3000
 ```
 
-## Get started
+| Script                | What it does                                        |
+| --------------------- | --------------------------------------------------- |
+| `npm run build`       | Production build                                    |
+| `npm run preview`     | Serve the production build                          |
+| `npm run typecheck`   | TypeScript check                                    |
+| `npm run lint`        | ESLint                                              |
+| `npm run test:e2e`    | Playwright tests (builds and serves the app itself) |
+| `npm run test:e2e:ui` | Playwright interactive UI mode                      |
 
-Start the dev server, and the app will be available at [http://localhost:3000](http://localhost:3000).
+First time running the tests: `npx playwright install chromium`.
 
-```bash
-npm run dev
+## Architecture
+
+```
+src/
+├── app/            router + providers
+├── components/
+│   ├── ui/         shadcn/ui primitives
+│   ├── common/     shared building blocks (PageHeader, EmptyState, TextField, ...)
+│   └── layout/     DashboardLayout, Sidebar, Header, ...
+├── features/       one folder per feature: components, hooks, schema, types
+│   ├── dashboard/
+│   └── users/
+├── pages/          thin route components
+├── services/       API calls (no React in here)
+├── stores/         Zustand: client/UI state only (sidebar drawer, theme)
+├── hooks/          shared hooks
+└── lib/            utilities
+e2e/                Playwright tests + fixtures
 ```
 
-Build the app for production:
+**State rules.** Server data (users) lives in TanStack Query. Zustand holds only client/UI
+state that is shared across components (mobile sidebar, theme).
 
-```bash
-npm run build
-```
+**About the API.** Users come from [JSONPlaceholder](https://jsonplaceholder.typicode.com),
+which accepts `POST` requests but never stores anything. So after creating a user the app writes
+it into the query cache instead of refetching (a refetch would make the new user vanish). With a
+real backend, switch `useCreateUser` to `invalidateQueries` (see the comment in that file).
 
-Preview the production build locally:
+## Testing
 
-```bash
-npm run preview
-```
-
-## Learn more
-
-To learn more about Rsbuild, check out the following resources:
-
-- [Rsbuild documentation](https://rsbuild.rs) - explore Rsbuild features and APIs.
-- [Rsbuild GitHub repository](https://github.com/web-infra-dev/rsbuild) - your feedback and contributions are welcome!
+Playwright tests run against the production build. The external API is **fully mocked** with
+`page.route` (see `e2e/fixtures.ts`), so tests are fast, deterministic and offline-safe, and any
+request that isn't mocked fails loudly. Tests use accessible locators (roles, labels), never CSS classes.

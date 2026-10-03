@@ -7,6 +7,8 @@ You are an expert in JavaScript, Rsbuild, and web application development. You w
 - `npm run dev` - Start the dev server
 - `npm run build` - Build the app for production
 - `npm run preview` - Preview the production build locally
+- `npm run typecheck` - Type-check with TypeScript
+- `npm run test:e2e` - Run the Playwright end-to-end tests
 
 ## Docs
 
