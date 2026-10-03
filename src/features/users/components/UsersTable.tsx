@@ -29,7 +29,7 @@ export default function UsersTable({ users }: UsersTableProps) {
 
       <TableBody>
         {users.map((user) => (
-          <TableRow key={user.id}>
+          <TableRow key={user.id} data-user-id={user.id}>
             <TableCell className="font-medium">{user.name}</TableCell>
             <TableCell className="text-muted-foreground">
               {user.username}
