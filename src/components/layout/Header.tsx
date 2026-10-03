@@ -1,64 +1,46 @@
-import { Bell, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
-interface HeaderProps {
-  onMenuClick: () => void;
-}
+import { Button } from '@/components/ui/button';
+import { useSidebarStore } from '@/stores/sidebar.store';
 
-export default function Header({ onMenuClick }: HeaderProps) {
+import NotificationsMenu from './NotificationsMenu';
+import ThemeToggle from './ThemeToggle';
+
+export default function Header() {
+  const openMobile = useSidebarStore((state) => state.openMobile);
+
   return (
-    <header
-      className="
-        flex
-        h-16
-        items-center
-        justify-between
-        border-b
-        px-4
-        sm:px-6
-      "
-    >
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={onMenuClick}
-          className="
-            rounded-md
-            p-2
-            hover:bg-muted
-            lg:hidden
-          "
-          aria-label="Open sidebar"
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background px-4 sm:px-6">
+      <div className="flex items-center gap-2">
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="Open navigation"
+          onClick={openMobile}
+          className="lg:hidden"
         >
-          <Menu size={20} />
-        </button>
+          <Menu />
+        </Button>
 
-        <h1 className="font-semibold">Admin Dashboard</h1>
+        <span className="font-semibold lg:hidden">Admin Panel</span>
       </div>
 
-      <div className="flex items-center gap-4">
-        <button
-          type="button"
-          className="rounded-md p-2 hover:bg-muted"
-          aria-label="Notifications"
-        >
-          <Bell size={20} />
-        </button>
+      <div className="flex items-center gap-1 sm:gap-2">
+        <ThemeToggle />
+        <NotificationsMenu />
 
-        <div
-          className="
-            flex
-            h-9
-            w-9
-            items-center
-            justify-center
-            rounded-full
-            bg-primary
-            text-sm
-            font-medium
-            text-primary-foreground
-          "
-        >
-          Y
+        <div className="ml-2 flex items-center gap-3">
+          <div
+            aria-hidden="true"
+            className="flex size-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground"
+          >
+            AD
+          </div>
+
+          <div className="hidden text-sm leading-tight md:block">
+            <p className="font-medium">Admin User</p>
+            <p className="text-xs text-muted-foreground">admin@example.com</p>
+          </div>
         </div>
       </div>
     </header>
