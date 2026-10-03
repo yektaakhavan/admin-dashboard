@@ -29,7 +29,7 @@ export default function RecentOrders() {
           <TableHeader>
             <TableRow>
               <TableHead>Customer</TableHead>
-              <TableHead>Product</TableHead>
+              <TableHead className="hidden sm:table-cell">Product</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Amount</TableHead>
             </TableRow>
@@ -39,7 +39,7 @@ export default function RecentOrders() {
             {recentOrders.map((order) => (
               <TableRow key={order.id}>
                 <TableCell className="font-medium">{order.customer}</TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell className="hidden text-muted-foreground sm:table-cell">
                   {order.product}
                 </TableCell>
                 <TableCell>

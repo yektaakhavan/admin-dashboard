@@ -27,7 +27,7 @@ export default function StatsCard({ stat }: StatsCardProps) {
 
             <p
               className={cn(
-                'flex items-center gap-1 text-xs font-medium',
+                'flex flex-wrap items-center gap-x-1 text-xs font-medium whitespace-nowrap',
                 isPositive ? 'text-success' : 'text-destructive',
               )}
             >
