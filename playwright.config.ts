@@ -13,7 +13,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
+  reporter: [['list'], ['html', { open: 'never' }]],
 
   use: {
     baseURL,
@@ -28,7 +28,12 @@ export default defineConfig({
     }),
   },
 
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+    },
+  ],
 
   // Tests run against the production build, which is what actually ships.
   webServer: {
