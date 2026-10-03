@@ -1,21 +1,16 @@
 import { create } from 'zustand';
 
+// Shared UI state: is the mobile navigation drawer open?
+// On desktop (lg and up) the sidebar is always visible, so this only
+// controls the off-canvas drawer on small screens.
 interface SidebarState {
-  isOpen: boolean;
-  toggle: () => void;
-  close: () => void;
+  isMobileOpen: boolean;
+  openMobile: () => void;
+  closeMobile: () => void;
 }
 
 export const useSidebarStore = create<SidebarState>((set) => ({
-  isOpen: true,
-
-  toggle: () =>
-    set((state) => ({
-      isOpen: !state.isOpen,
-    })),
-
-  close: () =>
-    set({
-      isOpen: false,
-    }),
+  isMobileOpen: false,
+  openMobile: () => set({ isMobileOpen: true }),
+  closeMobile: () => set({ isMobileOpen: false }),
 }));
