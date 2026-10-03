@@ -1,35 +1,35 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
-
-import Dashboard from '@/pages/Dashboard';
-import NotFound from '@/pages/NotFound';
-import Users from '@/pages/Users';
-import { Navigate } from 'react-router-dom';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import RouteError from '@/components/common/RouteError';
 
+// Pages are loaded on demand (code splitting) via React Router's `lazy`.
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <DashboardLayout />,
+    errorElement: <RouteError />,
     children: [
-      {
-        index: true,
-        element: <Navigate to="/dashboard" replace />,
-      },
+      { index: true, element: <Navigate to="/dashboard" replace /> },
       {
         path: 'dashboard',
-        element: <Dashboard />,
+        lazy: async () => ({
+          Component: (await import('@/pages/Dashboard')).default,
+        }),
       },
-
       {
         path: 'users',
-        element: <Users />,
+        lazy: async () => ({
+          Component: (await import('@/pages/Users')).default,
+        }),
+      },
+      {
+        // Inside the layout, so the sidebar is still available on a 404.
+        path: '*',
+        lazy: async () => ({
+          Component: (await import('@/pages/NotFound')).default,
+        }),
       },
     ],
-  },
-
-  {
-    path: '*',
-    element: <NotFound />,
   },
 ]);
