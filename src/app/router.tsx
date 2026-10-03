@@ -1,10 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import DashboardLayout from '@/layouts/dashboard/DashboardLayout';
+
 import Dashboard from '@/pages/Dashboard';
 import NotFound from '@/pages/NotFound';
 import Users from '@/pages/Users';
 import { Navigate } from 'react-router-dom';
+import DashboardLayout from '@/components/layout/DashboardLayout';
 
 export const router = createBrowserRouter([
   {
