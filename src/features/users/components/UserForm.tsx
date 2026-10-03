@@ -1,15 +1,14 @@
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 
+import TextField from '@/components/common/TextField';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-
-import { userSchema, type UserFormData } from '../schema';
 
 import { useCreateUser } from '../hooks/useCreateUser';
+import { userSchema, type UserFormData } from '../schema';
 
 export default function UserForm() {
-  const createUserMutation = useCreateUser();
+  const createUser = useCreateUser();
 
   const {
     register,
@@ -18,53 +17,62 @@ export default function UserForm() {
     formState: { errors },
   } = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
+    defaultValues: { name: '', username: '', email: '' },
   });
 
-  const onSubmit = async (data: UserFormData) => {
-    await createUserMutation.mutateAsync(data);
-
-    reset();
+  const onSubmit = (data: UserFormData) => {
+    createUser.mutate(data, { onSuccess: () => reset() });
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-lg space-y-5">
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Name</label>
+    // noValidate: let Zod show the messages instead of the browser's own bubbles.
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      aria-label="Create user"
+      className="space-y-5"
+    >
+      <div className="grid gap-5 md:grid-cols-3">
+        <TextField
+          label="Name"
+          autoComplete="off"
+          error={errors.name?.message}
+          {...register('name')}
+        />
 
-        <Input {...register('name')} />
+        <TextField
+          label="Username"
+          autoComplete="off"
+          error={errors.username?.message}
+          {...register('username')}
+        />
 
-        {errors.name && (
-          <p className="text-sm text-destructive">{errors.name.message}</p>
-        )}
+        <TextField
+          label="Email"
+          type="email"
+          autoComplete="off"
+          error={errors.email?.message}
+          {...register('email')}
+        />
       </div>
 
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Username</label>
+      <div className="flex flex-wrap items-center gap-4">
+        <Button type="submit" disabled={createUser.isPending}>
+          {createUser.isPending ? 'Creating...' : 'Create user'}
+        </Button>
 
-        <Input {...register('username')} />
+        {createUser.isSuccess && (
+          <p role="status" className="text-sm text-success">
+            User “{createUser.data.name}” was created.
+          </p>
+        )}
 
-        {errors.username && (
-          <p className="text-sm text-destructive">{errors.username.message}</p>
+        {createUser.isError && (
+          <p role="alert" className="text-sm text-destructive">
+            Failed to create user. Please try again.
+          </p>
         )}
       </div>
-
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Email</label>
-
-        <Input type="email" {...register('email')} />
-
-        {errors.email && (
-          <p className="text-sm text-destructive">{errors.email.message}</p>
-        )}
-      </div>
-
-      {createUserMutation.isError && (
-        <p className="text-sm text-destructive">Failed to create user.</p>
-      )}
-
-      <Button type="submit" disabled={createUserMutation.isPending}>
-        {createUserMutation.isPending ? 'Creating...' : 'Create User'}
-      </Button>
     </form>
   );
 }

@@ -1,92 +1,109 @@
+import { SearchX, UsersRound } from 'lucide-react';
 import { useState } from 'react';
 
+import EmptyState from '@/components/common/EmptyState';
+import ErrorState from '@/components/common/ErrorState';
+import PageHeader from '@/components/common/PageHeader';
+import SectionCard from '@/components/common/SectionCard';
 import { Input } from '@/components/ui/input';
 
+import UserForm from './components/UserForm';
 import UserSkeleton from './components/UserSkeleton';
 import UsersTable from './components/UsersTable';
 import { useUsers } from './hooks/useUsers';
-import UserForm from './components/UserForm';
+import type { User } from './types';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+function filterUsers(users: User[], search: string) {
+  const query = search.trim().toLowerCase();
+
+  if (!query) return users;
+
+  return users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(query) ||
+      user.username.toLowerCase().includes(query) ||
+      user.email.toLowerCase().includes(query),
+  );
+}
+
 export default function UsersView() {
-  const { data, isLoading, isError } = useUsers();
-
+  const { data: users, isPending, isError, refetch } = useUsers();
   const [search, setSearch] = useState('');
 
-  if (isLoading) {
-    return (
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold">Users</h1>
+  const filteredUsers = users ? filterUsers(users, search) : [];
 
-        <div className="space-y-2">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <UserSkeleton key={index} />
-          ))}
-        </div>
-      </div>
-    );
-  }
+  const renderList = () => {
+    if (isPending) return <UserSkeleton />;
 
-  if (isError) {
-    return (
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold">Users</h1>
+    if (isError) {
+      return (
+        <ErrorState
+          title="Failed to load users"
+          description="Something went wrong while fetching the users."
+          onRetry={() => refetch()}
+        />
+      );
+    }
 
-        <p className="text-destructive">Failed to load users.</p>
-      </div>
-    );
-  }
+    if (users.length === 0) {
+      return (
+        <EmptyState
+          icon={UsersRound}
+          title="No users yet"
+          description="Create the first user using the form above."
+        />
+      );
+    }
 
-  if (!data?.length) {
-    return (
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold">Users</h1>
+    if (filteredUsers.length === 0) {
+      return (
+        <EmptyState
+          icon={SearchX}
+          title="No users match your search"
+          description="Try a different name, username or email."
+        />
+      );
+    }
 
-        <p className="text-muted-foreground">No users found.</p>
-      </div>
-    );
-  }
-
-  const filteredUsers = data.filter((user) => {
-    const query = search.toLowerCase();
-
-    return (
-      user.name.toLowerCase().includes(query) ||
-      user.email.toLowerCase().includes(query) ||
-      user.username.toLowerCase().includes(query)
-    );
-  });
+    return <UsersTable users={filteredUsers} />;
+  };
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Users</h1>
-
-        <p className="mt-2 text-muted-foreground">Manage and search users.</p>
-      </div>
-
-      <Input
-        placeholder="Search users..."
-        value={search}
-        onChange={(event) => setSearch(event.target.value)}
-        className="max-w-sm"
+      <PageHeader
+        title="Users"
+        description="Create, browse and search users."
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Create User</CardTitle>
-        </CardHeader>
+      <SectionCard
+        title="Create user"
+        description="Add a new user to the list."
+      >
+        <UserForm />
+      </SectionCard>
 
-        <CardContent>
-          <UserForm />
-        </CardContent>
-      </Card>
+      <SectionCard
+        title="All users"
+        description={
+          users
+            ? `Showing ${filteredUsers.length} of ${users.length} users`
+            : undefined
+        }
+      >
+        <div className="space-y-4">
+          <Input
+            type="search"
+            aria-label="Search users"
+            placeholder="Search by name, username or email..."
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            disabled={isPending || isError}
+            className="sm:max-w-sm"
+          />
 
-      {filteredUsers.length > 0 ? (
-        <UsersTable users={filteredUsers} />
-      ) : (
-        <p className="text-muted-foreground">No users match your search.</p>
-      )}
+          {renderList()}
+        </div>
+      </SectionCard>
     </div>
   );
 }

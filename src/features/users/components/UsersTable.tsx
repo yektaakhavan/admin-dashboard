@@ -1,6 +1,7 @@
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -15,28 +16,28 @@ interface UsersTableProps {
 
 export default function UsersTable({ users }: UsersTableProps) {
   return (
-    <div className="rounded-lg border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Username</TableHead>
-            <TableHead>Email</TableHead>
+    <Table>
+      <TableCaption className="sr-only">List of users</TableCaption>
+
+      <TableHeader>
+        <TableRow>
+          <TableHead>Name</TableHead>
+          <TableHead>Username</TableHead>
+          <TableHead>Email</TableHead>
+        </TableRow>
+      </TableHeader>
+
+      <TableBody>
+        {users.map((user) => (
+          <TableRow key={user.id}>
+            <TableCell className="font-medium">{user.name}</TableCell>
+            <TableCell className="text-muted-foreground">
+              {user.username}
+            </TableCell>
+            <TableCell>{user.email}</TableCell>
           </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {users.map((user) => (
-            <TableRow key={user.id}>
-              <TableCell className="font-medium">{user.name}</TableCell>
-
-              <TableCell>{user.username}</TableCell>
-
-              <TableCell>{user.email}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+        ))}
+      </TableBody>
+    </Table>
   );
 }

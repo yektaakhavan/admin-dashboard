@@ -1,4 +1,4 @@
-import type { User } from '@/features/users/types';
+import type { NewUser, User } from '@/features/users/types';
 
 const API_URL = 'https://jsonplaceholder.typicode.com';
 
@@ -12,7 +12,7 @@ export async function fetchUsers(): Promise<User[]> {
   return response.json();
 }
 
-export async function createUser(user: Omit<User, 'id'>): Promise<User> {
+export async function createUser(user: NewUser): Promise<User> {
   const response = await fetch(`${API_URL}/users`, {
     method: 'POST',
     headers: {
