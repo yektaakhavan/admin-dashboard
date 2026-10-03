@@ -1,26 +1,28 @@
+import PageHeader from '@/components/common/PageHeader';
+
+import RecentOrders from './components/RecentOrders';
+import RevenueChart from './components/RevenueChart';
 import StatsCard from './components/StatsCard';
 import { statsData } from './data';
-import RevenueChart from './components/RevenueChart';
-import RecentOrders from './components/RecentOrders';
 
 export default function DashboardView() {
   return (
-    <section className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+    <div className="space-y-6">
+      <PageHeader
+        title="Dashboard"
+        description="Welcome back! Here is your business overview."
+      />
 
-        <p className="mt-2 text-muted-foreground">
-          Welcome back! Here is your business overview.
-        </p>
-      </div>
+      <section aria-label="Key statistics">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {statsData.map((stat) => (
+            <StatsCard key={stat.title} stat={stat} />
+          ))}
+        </div>
+      </section>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        {statsData.map((stat) => (
-          <StatsCard key={stat.title} stat={stat} />
-        ))}
-      </div>
       <RevenueChart />
       <RecentOrders />
-    </section>
+    </div>
   );
 }
