@@ -8,7 +8,11 @@
     "dev": "rsbuild --open",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "preview": "rsbuild preview"
+    "preview": "rsbuild preview",
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -29,6 +33,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
     "@rsbuild/core": "^2.1.9",
     "@rsbuild/plugin-react": "^2.1.0",
     "@rsbuild/plugin-tailwindcss": "^2.0.3",

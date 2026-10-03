@@ -19,3 +19,8 @@ dist/
 Notes.txt
 
 src/assets/Project process/
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

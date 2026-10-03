@@ -6,7 +6,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'playwright-report', 'test-results']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -23,5 +23,15 @@ export default defineConfig([
     // shadcn/ui files export both components and style variants (e.g. buttonVariants).
     files: ['src/components/ui/**/*.{ts,tsx}'],
     rules: { 'react-refresh/only-export-components': 'off' },
+  },
+  {
+    // Playwright tests are not React code. Fixtures call `use()`, which the
+    // react-hooks rule would mistake for a React hook.
+    files: ['e2e/**/*.ts', 'playwright.config.ts'],
+    languageOptions: { globals: globals.node },
+    rules: {
+      'react-hooks/rules-of-hooks': 'off',
+      'react-hooks/exhaustive-deps': 'off',
+    },
   },
 ]);
