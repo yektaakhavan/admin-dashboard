@@ -71,7 +71,6 @@ Playwright tests run against the production build. The external API is **fully m
 request that isn't mocked fails loudly. Tests use accessible locators (roles, labels), never CSS classes.
 
 
-آخر همه ی readme هام
 
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png" width="100%" alt="section divider" />
 
